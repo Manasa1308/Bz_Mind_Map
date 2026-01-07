@@ -1,0 +1,36 @@
+import java.util.*;
+class Pos{
+    int pi;
+    int pj;
+    int lvl;
+    Pos(int pi,int pj,int lvl){
+        this.pi = pi;
+        this.pj = pj;
+        this.lvl = lvl;
+    }
+}
+class BeingZero {
+    int[] x = {-1,0,1,0};
+    int[] y = {0,1,0,-1};
+    public int orangesRotting(char[][] grid) {
+        int ans = 0;
+        int r = grid.length;
+        int c = grid[0].length;
+        int fo = 0;
+        Queue<Pos> q = new LinkedList<>();
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(grid[i][j] == '1'){
+                    fo++;
+                }
+                if(grid[i][j] == '2'){
+                    q.add(new Pos(i,j,0));
+                }
+            }
+        }
+        while(!q.isEmpty()){
+            Pos curr = q.remove();
+            for(int p=0;p<4;p++){
+                int ni = curr.pi + x[p];
+                int nj = curr.pj + y[p];
+                int level = curr.lvl;
