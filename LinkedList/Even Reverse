@@ -1,0 +1,54 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class SLLNode{
+	int data;
+	SLLNode next;
+	SLLNode(int d){
+		data = d;
+		next = null;
+	}
+};
+
+class BeingZero{
+	public SLLNode evenReverse(SLLNode A) {
+		SLLNode de = new SLLNode(9);
+        SLLNode te = de;
+        int pos = 1;
+        SLLNode temp = A;
+        while(temp != null){
+            if(pos%2 == 0){
+                te.next = new SLLNode(temp.data);
+                te = te.next;
+            }
+            temp = temp.next;
+            pos++;
+        }
+        de = reverse(de.next);
+        temp = A;
+        SLLNode curr = de;
+        pos = 1;
+        while(temp != null){
+            if(pos%2 == 0){
+                temp.data = curr.data;
+                curr = curr.next;
+            }
+            temp = temp.next;
+            pos++;
+        }
+        return A;
+	}
+    public SLLNode reverse(SLLNode h){
+        SLLNode curr = h,prev = null,next = null;
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+}
