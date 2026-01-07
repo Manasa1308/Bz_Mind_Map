@@ -1,0 +1,41 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class SLLNode{
+	int data;
+	SLLNode next;
+	SLLNode(int d){
+		data = d;
+		next = null;
+	}
+};
+
+class BeingZero{
+	public SLLNode solve(SLLNode h) {
+        if(h == null){
+            return h;
+        }
+        SLLNode oneh = new SLLNode(-99);
+        SLLNode zeroh = new SLLNode(-99);
+        SLLNode  temp = h;
+        SLLNode onet = oneh;
+        SLLNode zerot = zeroh;
+        while(temp != null){
+            if(temp.data != 0){
+                onet.next = temp;
+                onet = onet.next;
+            }
+            else{
+                zerot.next = temp;
+                zerot = zerot.next;
+            }
+            temp = temp.next;
+        }
+        onet.next = null;
+        zerot.next = oneh.next;
+        return zeroh.next;
+	}
+}
