@@ -1,0 +1,562 @@
+Stack:
+Stack is a linear Data Structure which follows last in first out (LIFO) or First in last out Principle .
+
+Methods in Stack:
+push() : pushing element on to the stack
+pop() : popping (removing) element from the stack
+peek(): finding the top most element in the stack
+isEmpty() / empty() : checking if stack is empty or not
+
+Stack is a class .So it can initialize itself
+
+Initialization of Stack:
+Stack<DataType> varname=new Stack<>();
+Ex: Stack<Integer>s=new Stack<>();
+s.push(10);
+s.push(20);
+s.pop(); //20 will be removed
+s.peek(); // 10 will be output 
+
+
+Questions on Stack :
+
+Q) LeetCode : 155
+Min Stack
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+Implement the MinStack class:
+•	MinStack() initializes the stack object.
+•	void push(int val) pushes the element val onto the stack.
+•	void pop() removes the element on the top of the stack.
+•	int top() gets the top element of the stack.
+•	int getMin() retrieves the minimum element in the stack.
+You must implement a solution with O(1) time complexity for each function.
+
+
+
+class MinStack {
+
+    Stack<Integer> s;
+    Stack<Integer> m;
+
+    public MinStack() {
+        s = new Stack<>();
+        m = new Stack<>();
+    }
+
+    public void push(int val) {
+        s.push(val);
+        if (m.isEmpty()) {
+            m.push(val);
+        } else {
+            m.push(Math.min(val, m.peek()));
+        }
+    }
+
+    public void pop() {
+        s.pop();
+        m.pop();
+    }
+
+    public int top() {
+        return s.peek();
+    }
+
+    public int getMin() {
+        return m.peek();
+    }
+}
+Q)LeetCode: Implement Stack using Queues(225)
+Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (push, top, pop, and empty).
+Implement the MyStack class:
+•	void push(int x) Pushes element x to the top of the stack.
+•	int pop() Removes the element on the top of the stack and returns it.
+•	int top() Returns the element on the top of the stack.
+•	boolean empty() Returns true if the stack is empty, false otherwise.
+Code:
+class MyStack 
+{
+    Queue<Integer> q1;
+    Queue<Integer> q2;
+    public MyStack() 
+    {
+      q1=new LinkedList<>();
+      q2=new LinkedList<>();
+    }
+    
+    public void push(int x)
+     {
+        q1.add(x);
+    }
+    
+    public int pop() 
+    {
+        if(q1.isEmpty())return -1;
+        else
+        {
+            while(q1.size()>1)
+            {
+                q2.add(q1.remove());
+            }
+            int ele=q1.remove();
+            Queue<Integer> temp=q1;
+            q1=q2;
+            q2=temp;
+            return ele;
+        }
+    }
+    
+    public int top() 
+    {
+        if(q1.isEmpty())return -1;
+       while(q1.size()>1)
+       {
+        q2.add(q1.remove());
+       }
+        int ans=q1.peek();
+        q2.add(q1.remove());
+        Queue<Integer> temp=q1;
+        q1=q2;
+        q2=temp;
+        return ans;
+
+    }
+    
+    public boolean empty() 
+    {
+        return q1.isEmpty();
+    }
+}
+
+Q)LeetCode:Next Greater Element I (496)
+The next greater element of some element x in an array is the first greater element that is to the right of x in the same array.
+You are given two distinct 0-indexed integer arrays nums1 and nums2, where nums1 is a subset of nums2.
+For each 0 <= i < nums1.length, find the index j such that nums1[i] == nums2[j] and determine the next greater element of nums2[j] in nums2. If there is no next greater element, then the answer for this query is -1.
+Return an array ans of length nums1.length such that ans[i] is the next greater element as described above.
+ 
+Code:
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+
+        for (int num : nums2) {
+            while (!stack.isEmpty() && stack.peek() < num) {
+                map.put(stack.pop(), num);
+            }
+            stack.push(num);
+        }
+
+        while (!stack.isEmpty()) {
+            map.put(stack.pop(), -1);
+        }
+
+        int[] res = new int[nums1.length];
+        for (int i = 0; i < nums1.length; i++) {
+            res[i] = map.get(nums1[i]);
+        }
+
+        return res;
+    }
+}
+
+Q)LeetCode:Next Greater Element II (503)
+Given a circular integer array nums (i.e., the next element of nums[nums.length - 1] is nums[0]), return the next greater number for every element in nums.
+The next greater number of a number x is the first greater number to its traversing-order next in the array, which means you could search circularly to find its next greater number. If it doesn't exist, return -1 for this number.
+Code:
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+
+        int n = nums.length;
+        int[] res = new int[n];
+        Stack<Integer> stack = new Stack<>();
+
+        Arrays.fill(res, -1);
+
+        for (int i = 0; i < 2 * n; i++) {
+            int num = nums[i % n];
+
+            while (!stack.isEmpty() && nums[stack.peek()] < num) {
+                res[stack.pop()] = num;
+            }
+
+            if (i < n) {
+                stack.push(i);
+            }
+        }
+
+        return res;
+    }
+}
+
+
+Q)Leetcode:Largest rectangle in histogram(84)
+Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+  
+Code:
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int n=heights.length;
+        int a[]=nse(heights,n);
+        int b[]=pse(heights,n);
+        int m=0;
+        for(int i=0;i<n;i++)
+        {
+            int area=(a[i]-b[i]-1)*heights[i];
+            m=Math.max(area,m);
+        }
+        return m;
+    }
+    public int[] nse(int []heights,int n)
+    {
+        int ns[]=new int[n];
+        Arrays.fill(ns,n);
+        Stack<Integer> wa=new Stack<>();
+        for(int i=0;i<n;i++)
+        {
+            while(!wa.isEmpty() && heights[i]<heights[wa.peek()])
+            {
+                ns[wa.pop()]=i;
+            }
+            wa.push(i);
+        }
+        return ns;
+    }
+    public int[] pse(int[]heights,int n)
+    {
+        int ps[]=new int[n];
+        Arrays.fill(ps,-1);
+        Stack<Integer> wa=new Stack<>();
+        for(int i=n-1;i>=0;i--)
+        {
+            while(!wa.isEmpty() && heights[i]<heights[wa.peek()])
+            {
+                ps[wa.pop()]=i;
+            }
+            wa.push(i);
+        }
+        return ps;
+    }
+
+}
+
+Q)Collecting mangoes
+One day after storm Mina went to pick up mangoes in the garden with a basket. She began to pick up mangoes from the garden. And if
+she wants, she can throw away the last picked up mango from the basket. In this way, Mina kept picking up mangoes. She brought you
+with her to keep track of the biggest size of mango in the basket at that time. At any moment Mina can ask you about the biggest size of
+mango. Your job is to help Mina.
+
+Since you are a good programmer, so you write a program by which you are easily able to answer the question of Mina. During picking
+up mangoes, Mina can have 3 types of question/instruction for you.
+
+Type 1: Put an "x" size mango in the basket, which is picked up form garden.
+Type 2: Throw out last picked up mango.
+Type 3: Ask for the biggest mango size in the basket at that moment, in case of no mango, return 0.
+Code:
+class BeingZero {
+Stack<Integer> stk=new Stack<>();
+Stack<Integer> mx=new Stack<>();
+BeingZero(){
+mx.add(0);
+}
+public void add(int ele) {
+stk.push(ele);
+mx.push(Math.max(mx.peek(), ele));
+}
+public int query() {
+return mx.peek();
+}
+public void remove(){
+if(!stk.isEmpty()){
+stk.pop();
+mx. pop();
+}
+}
+}
+Queue:
+Queue is a Linear Data Structure which follows First in first out(FIFO) Principle.
+Queue is a interface .It cannot initialize itself so it needs to be implemented from class.
+Initialization of Queue:
+
+Queue<DataType>varname=new LinkedList<>();
+Queue<DataType>varname=new PriorityQueue<>();
+Queue<DataType>varname=new ArrayDeque<>();
+
+Methods of Queue:
+
+add(ele) / offer(ele) :adding elements into queue
+poll() / remove():removing an element from queue
+peek() : returns the front element of the queue without deleting it.
+size() : returns the size of the queue data structure
+isEmpty() : check if the data structure is empty or not 
+
+ Questions on Queue:
+
+Q)LeetCode : Implement queue using Stack(232)
+Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
+Implement the MyQueue class:
+•	void push(int x) Pushes element x to the back of the queue.
+•	int pop() Removes the element from the front of the queue and returns it.
+•	int peek() Returns the element at the front of the queue.
+•	boolean empty() Returns true if the queue is empty, false otherwise.
+
+
+
+Code:
+class MyQueue 
+{
+
+   Stack<Integer> s1;
+   Stack<Integer> s2;
+    public MyQueue() 
+    {
+        s1=new Stack<>();
+        s2=new Stack<>();
+    }
+    
+    public void push(int x) 
+    {
+        s1.push(x);
+    }
+    
+    public int pop()
+     {
+        if(s2.isEmpty())
+        {
+            while(!s1.isEmpty())
+            s2.add(s1.pop());
+        }
+        if(s2.isEmpty())return -1;
+        int p=s2.pop();
+        return p;
+
+    }
+    
+    public int peek() 
+    {
+        if(s2.isEmpty())
+        {
+            while(!s1.isEmpty())
+            {
+                s2.push(s1.pop());
+            }
+
+        }
+        return s2.peek();
+
+    }
+    
+    public boolean empty()
+     {
+        return s1.isEmpty() && s2.isEmpty();
+    }
+}
+
+Q)LeetCode:Binary Tree Level Order Traversal(102)
+Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
+ 
+
+Code:
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) 
+    {
+        List<List<Integer>> outer=new ArrayList<>();
+        if(root==null)return outer;
+        Queue<TreeNode>  q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty())
+        {
+            List<Integer> inner=new LinkedList<>();
+            int s=q.size();
+            for(int i=0;i<s;i++)
+            {
+               TreeNode curr=q.remove();
+               inner.add(curr.val);
+               if(curr.left!=null)q.add(curr.left);
+               if(curr.right!=null)q.add(curr.right);
+            }
+            outer.add(inner);
+
+        }
+        return outer;
+    }
+}
+
+Q)Burn a Tree
+Given a binary tree denoted by root node R and a target node L from this tree. We set target node on fire.
+It is known that all nodes connected to a given node (left child, right child and parent) get bured in 1 second. Then all the nodes which
+are connected through one intermediate get burned in 2 seconds, and so on.
+You need to find the minimum time required to burn the complete binary tree.
+Code:
+import java.util .*;
+class TreeNode{
+int val;
+TreeNode left, right;
+TreeNode(int d){
+val = d;
+left = right = null;
+}
+}
+class BeingZero{
+public int solve(TreeNode R, int L)
+{
+if(R == null)return 0;
+Map<TreeNode, TreeNode> m=new HashMap<>();
+Queue<TreeNode> q=new LinkedList<>();
+q.add(R);
+while(!q.isEmpty()){
+TreeNode curr=q.remove();
+if(curr.left != null){
+m.put(curr.left, curr);
+q.add(curr.left);
+}
+if(curr.right != null){
+m.put(curr.right, curr);
+q.add(curr.right);
+}
+}
+TreeNode st=find(R,L);
+Set<TreeNode> s=new Hashset<>();
+s.add(st);
+q.add(st);
+int ans=0;
+while(!q.isEmpty()){
+int size=q.size();
+boolean flag=false;
+for(int i=0;i<size;i++){
+TreeNode n=q.remove();
+if(m.containsKey(n) && !s.contains(m.get(n))){
+s.add(m.get(n));
+q.add(m.get(n));
+flag=true;
+}
+if(n.left != null && !s.contains(n.left)){
+S.add(n.left);
+q.add(n.left);
+flag=true;
+}
+if(n.right != null && !s.contains(n.right)){
+s.add(n.right);
+q.add(n.right);
+flag=true;
+}
+}
+If(flag)ans++;
+}
+return ans;
+}
+public TreeNode find(TreeNode r,int 1){
+if(r == null)return null;
+if(r.val == 1)return r;
+TreeNode left=find(r.left,1);
+TreeNode right=find(r.right,1);
+if(left == null)return right;
+if(right == null)return left;
+return null;}}
+PriorityQueue:
+
+A PriorityQueue is a data structure where elements are removed based on priority,not on insertion order.
+The element with highest priority (or lowest, depending on implementation) is served first.
+A priorityQueue is a class .It can initialize itself.
+In java default it is Min PriorityQueue
+
+Methods of PriorityQueue:
+
+add(ele) / offer(ele) :adding elements into queue
+poll() / remove():removing an element from queue
+peek() : returns the front element of the queue without deleting it.
+size() : returns the size of the queue data structure
+isEmpty() : check if the data structure is empty or not 
+
+Initialization of PriorityQueue:
+PriorityQueue<DataType>varname=new PriorityQueue<>():
+Ex : PriorityQueue<Integer>pq=new PriorityQueue<>();
+pq.add(10);
+pq.add(20);
+pq.remove(); // removes 10 as it less 
+Types of PriorityQueue :
+
+1)	Min PriorityQueue: 
+PriorityQueue<DataType>varname=new PriorityQueue<>();
+2)	Max PriorityQueue:
+PriorityQueue<DataType>varname=new PriorityQueue<>(Collections.reverseOrder);
+
+Questions on PriorityQueue:
+
+Q)Minimum cost to make Longest Chain
+
+Given N chains of different lengths, we need to join all of them to form one long chain. Cost of joining two chains of lengths A and B is A+B. Can you tell how much minimum cost we need to spend in order to join all given pieces into one long chain?
+
+ 
+          Code:
+           class Beingzero {
+               public int minCostLongChain(List<Integer> arr) {
+               PriorityQueue<Integer> pq=new PriorityQueue<>();
+               for(int ele:arr)
+                   pq.add(ele);
+              int ans=0;
+             while(pq.size()>1){
+                   int x=pq. remove();
+                   int y=pq. remove();
+                   int cost=x+y;
+                   ans=ans+cost;
+                   pq.add(cost);
+              }
+           return ans;     }
+       }
+Q) Median of Stream of numbers
+Median of an array is defined as the middle most positioned element, when array is sorted. If array has Odd size it's straightforward as there is a single middle element. But if array is even sized, we calculate median by taking average of two middle most numbers.
+Given a stream of integers, where integers are coming in any random order. We need to print the median correct upto one decimal place with every number considered to be just entered in our window. What it means is till first number, MEDIAN is median of 1 element. When second number enters, we got two numbers so far, so we need to print median of first two numbers now. When third number enters, we need median of three numbers now and so on.
+
+Code:
+import java.util.*;
+import java.io.*;
+class Beingzero {
+public float[] solve(int A[],int n) {
+float ans[]=new float[n];
+PriorityQueue<Float> left=new PriorityQueue<>((a,b)->Float.compare(b,a));
+PriorityQueue<Float> right=new PriorityQueue<>();
+for(int i=0;i<n;i++){
+float val=A[i];
+if(left.isEmpty()) left.add(val);
+else if(val>left.peek()) right.add(val);
+else left.add(val);
+if(right.size()-left.size()>1)
+left.add(right.poll());
+if(left.size()-right.size()>1)
+right.add(left.poll());
+if(left.size() == right.size())
+ans[i]=(left.peek()+right.peek())/2;
+else if(left.size()>right.size())
+ans[i]=left.peek();
+else ans[i]=right.peek();
+return ans;
+}
+}
+Q) Meeting Rooms(252)
+Given an 2D integer array A of size N x 2 denoting time intervals of different meetings.
+Where:
+A[i][0] = start time of the ith meeting.
+A[i][1] = end time of the ith meeting.
+Find the minimum number of conference rooms required so that all meetings can be done.
+Note :- If a meeting ends at time t, another meeting starting at time t can use the same conference room
+Code :
+import java.util .*;
+import java.io .*;
+class BeingZero {
+public int meetingRooms(ArrayList<ArrayList<Integer>> list) {
+Collections.sort(list, (a,b)->{
+return a.get(0)-b.get(0);
+PriorityQueue<Integer> pq=new PriorityQueue<>();
+for(ArrayList<Integer> x:list)
+{
+    int u=x.get(0);
+    int v=x.get(1);
+    if(!pq.isEmpty() && pq.peek() <= u)
+       pq. remove();
+   pq.add(v);
+}
+return pq.size();
+}
+}
