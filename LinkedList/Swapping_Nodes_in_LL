@@ -1,0 +1,51 @@
+/*
+class ListNode{
+    int val = 0;
+    ListNode next = null;
+}
+*/
+
+class BeingZero{
+    
+    ListNode swapNodes(ListNode head , int k){
+        // Given head and k. perform swap and return the head node
+        ListNode temp = head;
+        int size = 0;
+        while(temp != null){
+            size++;
+            temp = temp.next;
+        }
+        temp = head;
+        int i = 0;
+        int first = 0;
+        int last = 0;
+        while(temp != null){
+            if(i==k-1){
+                first = temp.val;
+            }
+            if(i == (size-k)){
+                last = temp.val;
+               // break;
+            }
+            temp = temp.next;
+            i++;
+        }
+        //System.out.println(last);
+        //System.out.println(first);
+        temp = head;
+        i = 0;
+        while(temp != null){
+            if(i == k-1){
+                temp.val = last;
+            }
+            if(i == (size-k)){
+                temp.val = first;
+                //break;
+            }
+            temp = temp.next;
+            i++;
+        }
+        return head;
+    }
+    
+}
