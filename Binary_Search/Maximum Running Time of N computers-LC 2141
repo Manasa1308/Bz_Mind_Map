@@ -1,0 +1,14 @@
+class Solution {
+    public long maxRunTime(int n, int[] b) {
+        long l=0,r=0;
+        for(int x:b) r+=x;
+        r/=n;
+        while(l<r){
+            long m=(l+r+1)/2,sum=0;
+            for(int x:b) sum+=Math.min(x,m);
+            if(sum>=m*n) l=m;
+            else r=m-1;
+        }
+        return l;
+    }
+}
