@@ -1,0 +1,19 @@
+class Solution {
+    double fractionalKnapsack(int W, Item[] arr, int n) {
+        Arrays.sort(arr, (a, b) ->
+            Double.compare((double)b.value / b.weight,
+                           (double)a.value / a.weight));
+
+        double ans = 0.0;
+        for (Item it : arr) {
+            if (W >= it.weight) {
+                W -= it.weight;
+                ans += it.value;
+            } else {
+                ans += (double)it.value * W / it.weight;
+                break;
+            }
+        }
+        return ans;
+    }
+}
