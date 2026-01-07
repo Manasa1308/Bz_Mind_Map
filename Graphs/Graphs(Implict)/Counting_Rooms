@@ -1,0 +1,27 @@
+
+import java.util.*;
+class BeingZero {
+int[] x ={-1,0,1,0};
+int[] y = {0,1,0,-1};
+public int solve(char[][] grid) { 
+	int r = grid.length;
+	int c = grid[0].length; int count=0;
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++){
+			if(grid[i][j] == '.'){
+				dfs(grid,i,j,r,c);
+				count++;
+			}
+		}
+	}
+	return count;
+}
+public void dfs(char[][] g,int si,int sj,int r,int c){
+	if(si ‹ 0 || sj <0|| si>=r || sj>=c || g[si][sj] == '#')return; 
+	g[si][sj] = '#';
+	for(int p=0; p<4;p++){
+		int ni = si+x[p];
+		int nj = sj+y[p];
+		dfs(g,ni,nj,r,c);
+	}
+}
