@@ -1,0 +1,37 @@
+import java.util.*;
+class Pos{
+    int pi;
+    int pj;
+    Pos(int pi,int pj){
+        this.pi = pi;
+        this.pj = pj;
+    }
+}
+class BeingZero {
+    int[][] a;
+    int[] x = {-2,-1,1,2,2,1,-1,-2};
+    int[] y = {1,2,2,1,-1,-2,-2,-1};
+    public int numberOfMoves(String st, String des){
+        // return minimum number of moves a knight takes to reach from start to destination.
+        a = new int[8][8];
+        int si = st.charAt(0)-'a';
+        int sj = Integer.parseInt(""+st.charAt(1))-1;
+        int di = des.charAt(0)-'a';
+        int dj = Integer.parseInt(""+des.charAt(1))-1;
+        bfs(si,sj,di,dj);
+        return a[di][dj];
+    }
+    public void bfs(int si,int sj,int di,int dj){
+        if(si<0 || sj<0 || si>=8 || sj >= 8 || a[si][sj] != 0){
+            return;
+        }
+        Queue<Pos> q = new LinkedList<>();
+        q.add(new Pos(si,sj));
+        while(!q.isEmpty()){
+            Pos curr = q.remove();
+            if(curr.pi == di && curr.pj == dj){
+                return;
+            }
+            for(int p=0;p<8;p++){
+                int ni = curr.pi+x[p];
+}
