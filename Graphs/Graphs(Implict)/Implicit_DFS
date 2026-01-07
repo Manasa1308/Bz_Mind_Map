@@ -1,0 +1,23 @@
+import java.util.*;
+import java.io.*;
+class BeingZero {
+    int[] x8 = {-1,-1,0,1,1,1,0,-1};
+    int[] y8 = {0,1,1,1,0,-1,-1,-1};
+    int k = 1;
+    public int[][] solve(int r, int c, int si, int sj) {
+        int[][] ans = new int[r][c];
+        dfs(ans,r,c,si,sj);
+        return ans;
+    }
+    public void dfs(int[][] ans,int r,int c,int si,int sj){
+        if(si < 0 || sj<0 || si>=r||sj>=c || ans[si][sj] != 0){
+            return;
+        }
+        ans[si][sj] = k++;
+        for(int p=0;p<8;p++){
+            int ni = si+x8[p];
+            int nj = sj+y8[p];
+            dfs(ans,r,c,ni,nj);
+        }
+    }
+}
