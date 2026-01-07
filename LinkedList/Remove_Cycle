@@ -1,0 +1,38 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class SLLNode{
+	int data;
+	SLLNode next;
+	SLLNode(int d){
+		data = d;
+		next = null;
+	}
+};
+
+class BeingZero{
+	public void removeCycle(SLLNode A) {
+        SLLNode f = A, s = A;
+        if(A == null || A.next == null){
+            return;
+        }
+        while(f != null && f.next != null){
+            f = f.next.next;
+            s = s.next;
+            if(f==s){
+                f = A;
+                while(f != s){
+                    f = f.next;
+                    s = s.next;
+                }
+                while(f.next != s){
+                    f = f.next;
+                }
+                f.next = null;
+            }
+        }
+	}
+}
