@@ -1,0 +1,524 @@
+                                          TREES
+BINARY TREE:
+Each node can have at most 2 children
+•	Left                                                                                              
+•	Right
+Node Structure:
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+
+Creating a Binary Tree:
+public class BinaryTree {
+    Node root;
+    public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
+        tree.root = new Node(10);
+        tree.root.left = new Node(5);
+        tree.root.right = new Node(20);
+        tree.root.left.left = new Node(3);
+tree.root.left.right = new Node(7);
+    }
+}
+
+
+
+Count Number of Nodes:
+🔹 Logic
+•	Count left subtree
+•	Count right subtree
+•	Add 1 (current node)
+🔹 Code
+int countNodes(Node root) {
+    if (root == null) 
+        return 0;
+    return countNodes(root.left) + countNodes(root.right) + 1;
+}
+
+
+Height of Binary Tree:
+🔹 Logic
+•	Height = max height of left & right + 1
+•	Base case: null → 0
+🔹 Code
+int height(Node root) {
+    if (root == null)
+        return 0;
+    return Math.max(height(root.left), height(root.right)) + 1;
+
+Search an Element in Binary Tree:
+🔹 Logic
+•	Check root
+•	Search left
+•	Search right
+
+
+🔹 Code
+boolean search(Node root, int key) {
+    if (root == null)
+        return false;
+
+    if (root.data == key)
+        return true;
+
+    return search(root.left, key) || search(root.right, key);
+}
+
+
+
+BINARY SEARCH TREE (BST):
+BST Node Structure:
+class Node {
+    int data; 
+    Node left, right;
+    Node(int data) {
+        this.data = data;
+        left = right = null;   }}
+Insert into BST:
+  If tree is empty → new node becomes root
+  If key < root.data → go left
+  If key > root.data → go right
+  Repeat recursively
+
+Node insert(Node root, int key) {
+    if (root == null) 
+        return new Node(key);
+    if (key < root.data)
+        root.left = insert(root.left, key);
+    else if (key > root.data)
+        root.right = insert(root.right, key);
+    return root;
+}
+
+
+Search in BST:
+
+boolean search(Node root, int key) {
+    if (root == null)
+        return false; 
+    if (root.data == key)
+        return true;
+    if (key < root.data)
+        return search(root.left, key);
+    else
+        return search(root.right, key);
+***Delete a Node in BST:***
+3 Cases Logic:-
+Case 1: No child (Leaf node)
+→ Simply delete
+Case 2: One child
+→ Replace node with its child
+Case 3: Two children
+→ Replace with Inorder Successor
+→ Delete successor
+
+Node delete(Node root, int key) {
+    if (root == null)
+        return null;
+    if (key < root.data)
+        root.left = delete(root.left, key);
+    else if (key > root.data)
+        root.right = delete(root.right, key);
+    else {
+        // Case 1 & 2
+        if (root.left == null)
+            return root.right;
+        else if (root.right == null)
+            return root.left;
+        // Case 3
+        root.data = findMin(root.right);
+        root.right = delete(root.right, root.data);
+    }
+    return root;
+}
+Node findMin(r){
+If(r==null){
+Return null;
+}
+If(r.left==null){
+return r; 
+}
+return findMin(r.left);
+}
+
+
+Find Minimum Element:
+ Logic
+•	Keep going left
+•	Leftmost node = minimum
+Code
+int findMin(Node root) {
+    while (root.left != null)
+        root = root.left;
+
+    return root.data;
+}
+
+
+
+Find Maximum Element:
+🔹 Logic
+•	Keep going right
+•	Rightmost node = maximum
+🔹 Code
+int findMax(Node root) {
+    while (root.right != null)
+        root = root.right;
+
+    return root.data;
+}
+
+NOTE: Height of BST is same as BT
+
+Validate if a Tree is BST:
+Logic
+•	Every node must lie in a valid range
+•	Left < node < Right
+Code
+boolean isBST(Node root, int min, int max) {
+    if (root == null)
+        return true;
+    if (root.data <= min || root.data >= max)
+        return false; 
+    return isBST(root.left, min, root.data) &&
+           isBST(root.right, root.data, max);
+}
+Call:
+isBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+
+
+
+TREE TRAVERSALS:
+
+Preorder Traversal (Root → Left → Right)
+Inorder Traversal (Left → Root → Right)
+Postorder Traversal (Left → Right → Root)
+
+void preorder(Node root) {
+    if (root == null)
+        return;
+    System.out.print(root.data + " ");
+    preorder(root.left);
+    preorder(root.right);
+}
+void inorder(Node root) {
+    if (root == null)
+        return;
+    inorder(root.left);
+    System.out.print(root.data + " ");
+    inorder(root.right);
+}
+void postorder(Node root) {
+    if (root == null)
+        return;
+
+    postorder(root.left);
+    postorder(root.right);
+    System.out.print(root.data + " ");
+}
+Level Order Traversal:
+Logic
+1.	Push root into queue
+2.	Pop node, print
+3.	Push left & right children
+4.	Repeat
+
+import java.util.*; 
+void levelOrder(Node root) {
+List<Integer> ans = new ArrayList<>();
+    if (root == null)
+        return;
+    Queue<Node> q = new LinkedList<>();
+    q.add(root);
+    while (!q.isEmpty()) {
+         List<Integer> newl = new ArrayList<>();
+         Int size = q.size();
+          for(int i=0;i<size;i++){
+              Node curr = q.remove();
+              Newl.add(curr.data);
+        if (curr.left != null)
+            q.add(curr.left);
+        if (curr.right != null)
+            q.add(curr.right);
+    }
+Ans.add(newl);
+}
+return ans;
+
+Applications of LOT:
+
+LEFT VIEW OF BINARY TREE:
+
+Left view = first node visible at each level
+
+import java.util.*;
+void leftView(Node root) {
+    if (root == null)
+        return;
+    Queue<Node> q = new LinkedList<>();
+    q.add(root);
+    while (!q.isEmpty()) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            Node curr = q.poll();
+            if (i == 0)  // first node of level
+                System.out.print(curr.data + " ");
+            if (curr.left != null)
+                q.add(curr.left);
+            if (curr.right != null)
+                q.add(curr.right);
+        }
+    }
+}
+
+
+
+ZIGZAG (SPIRAL) TRAVERSAL:
+Logic
+•	Level 1 → Left to Right
+•	Level 2 → Right to Left
+•	Alternate direction every level
+
+import java.util.*;
+void zigzagTraversal(Node root) {
+    if (root == null)
+        return;
+    Queue<Node> q = new LinkedList<>();
+    boolean leftToRight = true;
+    q.add(root);
+    while (!q.isEmpty()) {
+        int size = q.size();
+        int[] level = new int[size];
+        for (int i = 0; i < size; i++) {
+            Node curr = q.poll();
+            int index = leftToRight ? i : size - 1 - i;
+            level[index] = curr.data;
+            if (curr.left != null)
+                q.add(curr.left);
+            if (curr.right != null)
+                q.add(curr.right);
+        }
+        for (int val : level)
+            System.out.print(val + " ");
+        leftToRight = !leftToRight;
+    }
+VERTICAL ORDER TRAVERSAL:
+
+import java.util.*;
+void verticalOrder(Node root) {
+    if (root == null)
+        return;
+    TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<>();
+    Queue<Pair> q = new LinkedList<>();
+    q.add(new Pair(root, 0));
+    while (!q.isEmpty()) {
+        Pair p = q.poll();
+        Node curr = p.node;
+        int hd = p.hd;
+        map.putIfAbsent(hd, new ArrayList<>());
+        map.get(hd).add(curr.data);
+        if (curr.left != null)
+            q.add(new Pair(curr.left, hd - 1));
+        if (curr.right != null)
+            q.add(new Pair(curr.right, hd + 1));
+    }
+
+    for (ArrayList<Integer> list : map.values()) {
+        for (int val : list)
+            System.out.print(val + " ");
+        System.out.println();
+    }
+}
+
+
+**IMPORTANT QUESTIONS**
+DISTANCE (LENGTH) BETWEEN TWO NODES IN A TREE:
+steps:
+1.	Find LCA
+2.	Find distance from LCA to each node
+#Step 1: Find LCA
+3.	Node lca(Node root, int n1, int n2) {
+4.	    if (root == null) 
+5.	        return null;
+6.	    if (root.data == n1 || root.data == n2)
+7.	        return root;
+8.	
+9.	    if(root.data>n1&&root.data>n2){
+10.	     return lca(root.left,n1,n2);
+11.	}else if(root.data<n1&&root.data<n2){
+12.	      Return lca(root.right,n1,n2);
+13.	}else{
+14.	return root.data;
+15.	}
+16.	}
+17.	________________________________________
+18.	# Step 2: Distance from Root to Node
+19.	int distance(Node root, int key, int level) {
+20.	    if (root == null)
+21.	        return -1;
+22.	
+23.	    if (root.data == key)
+24.	        return level;
+25.	
+26.	    int left = distance(root.left, key, level + 1);
+27.	    if (left != -1)
+28.	        return left;
+29.	
+30.	    return distance(root.right, key, level + 1);
+31.	}
+32.	________________________________________
+33.	# Step 3: Distance Between Two Nodes
+34.	int distanceBetweenNodes(Node root, int n1, int n2) {
+35.	    Node LCA = lca(root, n1, n2);
+36.	
+37.	    int d1 = distance(LCA, n1, 0);
+38.	    int d2 = distance(LCA, n2, 0);
+39.	
+40.	    return d1 + d2;
+41.	}
+
+
+YOU CAN ALSO FIND DISTANCE FROM ROOT TO NODE USING “FIND PATH”(refer notes) just like you do in guide mickey to cheese prblm
+public fph(node root,int a,List<node>l){
+        if(root==null){
+            return;
+        }
+        if(root.val==a){
+            l.add(root);
+            return;
+        }
+        fph(root.left,a,l);
+        if(l.size()>0){
+            l.add(root);
+            return;
+        }
+        fph(root.right,a,l);
+        if(l.size()>0){
+            l.add(root);
+            return;
+        }
+    }
+
+
+GUIDE MICKEY TO CHEESE (PATH FINDING):
+Problem Meaning
+•	Mickey = root
+•	Cheese = target node
+•	Print path from root to target (path in “u r l” from)
+
+
+•	public class Main {
+•	    public String(int mickey,int cheese){
+•	        List<node> lmr = new ArrayList<>();
+•	        List<node> lcr = new ArrayList<>();
+•	        fph(root,mickey,lmr);
+•	        fph(root,cheese,lcr);
+•	        while(i>=0&&j>=0&&lmr.get(i)==lcr.get(j)){
+•	            i--;
+•	            j--;
+•	        }
+•	        String s="";
+•	        for(int k=0;k<=i;k++){
+•	            s+="u";
+•	        }
+•	        while(j>=0){
+•	            if(lcr.get(j+1).left==lcr.get(j)){
+•	                s+="l";
+•	            }else{
+•	                s+='r';
+•	            }
+•	            j--;
+•	        }
+•	        return s;
+•	    }
+
+•	    public fph(node root,int a,List<node>l){
+•	        if(root==null){
+•	            return;
+•	        }
+•	        if(root.val==a){
+•	            l.add(root);
+•	            return;
+•	        }
+•	        fph(root.left,a,l);
+•	        if(l.size()>0){
+•	            l.add(root);
+•	            return;
+•	        }
+•	        fph(root.right,a,l);
+•	        if(l.size()>0){
+•	            l.add(root);
+•	            return;
+•	        }
+•	    }
+•	}
+•	
+
+BURN A TREE (MOST POPULAR QUESTION):
+Problem Meaning
+•	Fire starts at a target node
+•	Every second:
+o	Fire spreads to parent
+o	Fire spreads to children
+•	Find time to burn entire tree
+
+Step 1: Map Parent Pointers
+void mapParents(Node root, Map<Node, Node> parent) {
+    Queue<Node> q = new LinkedList<>();
+    q.add(root);
+    while (!q.isEmpty()) {
+        Node curr = q.poll();
+        if (curr.left != null) {
+            parent.put(curr.left, curr);
+            q.add(curr.left);
+        }
+        if (curr.right != null) {
+            parent.put(curr.right, curr);
+            q.add(curr.right);
+        }
+    }
+}
+ Step 2: Burn Tree Using BFS
+int burnTree(Node root, Node target) {
+    Map<Node, Node> parent = new HashMap<>();
+    mapParents(root, parent);
+    Queue<Node> q = new LinkedList<>();
+    Set<Node> visited = new HashSet<>();
+    q.add(target);
+    visited.add(target);
+    int time = 0;
+    while (!q.isEmpty()) {
+        int size = q.size();
+        boolean burned = false;
+        for (int i = 0; i < size; i++) {
+            Node curr = q.poll();
+            if (curr.left != null && !visited.contains(curr.left)) {
+                burned = true;
+                visited.add(curr.left);
+                q.add(curr.left);
+            }
+            if (curr.right != null && !visited.contains(curr.right)) {
+                burned = true;
+                visited.add(curr.right);
+                q.add(curr.right);
+            }
+            if (parent.get(curr) != null &&
+                !visited.contains(parent.get(curr))) {
+                burned = true;
+                visited.add(parent.get(curr));
+                q.add(parent.get(curr));
+            }
+        }
+        if (burned)
+            time++;
+    }return time;}
+
