@@ -1,0 +1,46 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int[] b = new int[n];
+            for (int i = 0; i < n; i++) b[i] = sc.nextInt();
+
+            int[] a = new int[n];
+            int[] c = new int[n];
+            boolean ok = true;
+
+            PriorityQueue<Integer> pqA = new PriorityQueue<>();
+            PriorityQueue<Integer> pqC = new PriorityQueue<>();
+
+            for (int i = 1; i <= n; i++) {
+                pqA.add(i);
+                pqC.add(i);
+            }
+
+            for (int i = 0; i < n; i++) {
+                if (!pqA.remove(b[i])) ok = false;
+                a[i] = b[i];
+            }
+
+            for (int i = 0; i < n; i++) {
+                if (pqC.peek() < b[i]) {
+                    c[i] = pqC.poll();
+                } else ok = false;
+            }
+
+            if (!ok) {
+                System.out.println(-1);
+                continue;
+            }
+
+            for (int x : a) System.out.print(x + " ");
+            System.out.println();
+            for (int x : c) System.out.print(x + " ");
+            System.out.println();
+        }
+    }
+}
