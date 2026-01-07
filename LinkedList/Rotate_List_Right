@@ -1,0 +1,35 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class SLLNode{
+	int data;
+	SLLNode next;
+	SLLNode(int d){
+		data = d;
+		next = null;
+	}
+};
+
+class BeingZero{
+	public SLLNode rotateRight(SLLNode head, int k) {
+		if(head == null){
+            return head;
+        }
+        SLLNode temp = head,curr=head;int size=1;
+        while(temp.next != null){
+            size++;
+            temp = temp.next;
+        }
+        k = k%size;
+        for(int i=1;i<size-k;i++){
+            curr = curr.next;
+        }
+        SLLNode x = curr.next;
+        curr.next = null;
+        temp.next = head;
+        return x;
+	}
+}
